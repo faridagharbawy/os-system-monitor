@@ -48,7 +48,7 @@ def generate_dashboard():
     <head>
         <title>OS Project Dashboard</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <meta http-equiv="refresh" content="5">
+        <meta http-equiv="refresh" content="1">
         <style>
             body { font-family: 'Segoe UI', sans-serif; background: #121212;
                    color: white; padding: 20px; }

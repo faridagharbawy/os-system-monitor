@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Project Specific
+reports/*.log
+reports/*.html
+reports/*.md
+
+# OS files
+.DS_Store
+Thumbs.db

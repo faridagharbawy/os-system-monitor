@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  # Container 1: Data Collection
+  collector:
+    build: .
+    container_name: os_collector
+    environment:
+      - TZ=Africa/Cairo
+    privileged: true
+    volumes:
+      - ./reports:/app/reports
+    command: ["./monitor.sh"]
+
+  # Container 2: Reporting
+  reporter:
+    build: .
+    container_name: os_reporter
+    environment:
+      - TZ=Africa/Cairo
+    volumes:
+      - ./reports:/app/reports
+    depends_on:
+      - collector
+    command: ["python3", "processor.py"]
+
+  # Container 3: Web Visualization (Simple Web Server)
+  visualization:
+    image: python:3.9-slim
+    container_name: os_visualizer
+    environment:
+      - TZ=Africa/Cairo
+    ports:
+      - "9000:8000"
+    volumes:
+      - ./reports:/app
+    working_dir: /app
+    command: ["python3", "-m", "http.server", "8000"]

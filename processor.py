@@ -146,4 +146,4 @@ Generated on: {time.ctime()}
 if __name__ == "__main__":
     while True:
         generate_dashboard()
-        time.sleep(5)
+        time.sleep(1)

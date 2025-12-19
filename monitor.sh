@@ -50,5 +50,5 @@ while true; do
     # Log format: Time | CPU | Temp | GPU | Disk | SMART | Mem | Net | Load
     echo "$TIMESTAMP|$CPU|$TEMP|$GPU_LOAD|$DISK|$SMART|$MEM|$NET|$LOAD" >> $LOG_FILE
     
-    sleep 5
+    sleep 1
 done

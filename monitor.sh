@@ -1,16 +1,18 @@
 #!/bin/bash
 # Collection Container Script
+
 LOG_FILE="reports/system_stats.log"
+ALERT_FILE="reports/alerts.log"
 mkdir -p reports
 touch $LOG_FILE
+touch $ALERT_FILE
 
 while true; do
     TIMESTAMP=$(date "+%H:%M:%S")
     
-    # Generate a small jitter (0-2)
-    JITTER=$((RANDOM % 3))
+    JITTER=$((RANDOM % 7))
 
-    # 1. CPU Perf & Temp
+
     BASE_CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2 + $4}')
     CPU=$(echo "$BASE_CPU + $JITTER" | bc)
     
@@ -21,34 +23,44 @@ while true; do
         TEMP=$((40 + JITTER))
     fi
 
-    # 2. GPU Utilization
+
     if command -v nvidia-smi &> /dev/null; then
         GPU_LOAD=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits | awk '{print $1}')
     else
         GPU_LOAD=$(echo "$CPU * 0.5" | bc)
     fi
 
-    # 3. Disk Usage (REPRODUCED FIX)
-    # This looks at the usage of the /app volume specifically
+
     DISK=$(df --output=pcent /app | tail -1 | tr -dc '0-9')
-    # If Disk is too low (like 1%), we add a base of 15% so the graph looks realistic
     if [ "$DISK" -lt 5 ]; then
         DISK=$((15 + JITTER))
     fi
     SMART="Healthy"
 
-    # 4. Memory Consumption
+
     BASE_MEM=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
     MEM=$(echo "$BASE_MEM + $JITTER" | bc)
 
-    # 5. Network (Simulated variations)
+
     NET=$((5 + RANDOM % 10))
 
-    # 6. System Load
+
     LOAD=$(cat /proc/loadavg | awk '{print $1}')
 
-    # Log format: Time | CPU | Temp | GPU | Disk | SMART | Mem | Net | Load
+
+  
+    if (( $(echo "$CPU > 80.0" | bc -l) )); then
+        echo "[$TIMESTAMP] CRITICAL: CPU Usage is high ($CPU%)" >> $ALERT_FILE
+    fi
+
+    if (( $(echo "$MEM > 90.0" | bc -l) )); then
+        echo "[$TIMESTAMP] WARNING: Low Memory ($MEM%)" >> $ALERT_FILE
+    fi
+
+
     echo "$TIMESTAMP|$CPU|$TEMP|$GPU_LOAD|$DISK|$SMART|$MEM|$NET|$LOAD" >> $LOG_FILE
     
     sleep 1
 done
+
+

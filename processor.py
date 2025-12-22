@@ -41,7 +41,6 @@ def generate_dashboard():
             net_p.append(parts[7].replace("MB", ""))
             load_p.append(parts[8])
 
-    # --- HTML Generation (Formatted for Pylint) ---
     html_head = """
     <!DOCTYPE html>
     <html>
@@ -113,7 +112,7 @@ def generate_dashboard():
     with open("reports/index.html", "w", encoding="utf-8") as file:
         file.write(html_head + html_body)
 
-    # --- Markdown Generation (Deliverable 3) ---
+
     try:
         def get_avg(data_list):
             nums = [float(x) for x in data_list if x.strip()]

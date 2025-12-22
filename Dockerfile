@@ -5,4 +5,3 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 COPY . .
 RUN chmod +x monitor.sh
-# No CMD here, docker-compose will provide the commands

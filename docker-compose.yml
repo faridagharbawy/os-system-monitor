@@ -1,6 +1,5 @@
 version: '3.8'
 services:
-  # Container 1: Data Collection
   collector:
     build: .
     container_name: os_collector
@@ -11,7 +10,6 @@ services:
       - ./reports:/app/reports
     command: ["./monitor.sh"]
 
-  # Container 2: Reporting
   reporter:
     build: .
     container_name: os_reporter
@@ -23,7 +21,6 @@ services:
       - collector
     command: ["python3", "processor.py"]
 
-  # Container 3: Web Visualization (Simple Web Server)
   visualization:
     image: python:3.9-slim
     container_name: os_visualizer

@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   collector:
-    build: .
+    image: yousseftarekk1/os-collector:v1 
     container_name: os_collector
     environment:
       - TZ=Africa/Cairo
@@ -11,7 +11,7 @@ services:
     command: ["./monitor.sh"]
 
   reporter:
-    build: .
+    image: yousseftarekk1/os-reporter:v1
     container_name: os_reporter
     environment:
       - TZ=Africa/Cairo
@@ -22,7 +22,7 @@ services:
     command: ["python3", "processor.py"]
 
   visualization:
-    image: python:3.9-slim
+    image: yousseftarekk1/os-visualizer:v1
     container_name: os_visualizer
     environment:
       - TZ=Africa/Cairo
